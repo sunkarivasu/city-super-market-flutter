@@ -1,6 +1,7 @@
 import 'package:city_super_market/constants.dart';
 import 'package:city_super_market/screens/orders.dart';
 import 'package:city_super_market/screens/productDetails.dart';
+import 'package:city_super_market/screens/proudct_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/home.dart';
@@ -72,19 +73,26 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
 
   final List<Widget> _widgetOptions = [
     const HomePage(),
+    const ProductCategories(),
     CartPage(),
     const AccountPage()
   ];
 
-  List<String> appBarTitles = ["City Super Market", "My Cart", "My Account"];
+  List<String> appBarTitles = [
+    "City Super Market",
+    "Categories",
+    "My Cart",
+    "My Account"
+  ];
 
   void _onTapped(index) {
-    if (index <= 2) {
+    if (index <= 3) {
       setState(() {
         // _selectedIndex = index;
         globals.User.setPageNumber(index);
       });
     } else if (index == 3) {
+      // FLAGGED: check if this code is ever called ?
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const OrdersPage()));
     } else if (index == 4) {
@@ -97,8 +105,9 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:
-          globals.User.pageNumber == 0 ? Drawer(child: DrawerOptions()) : null,
+      drawer: globals.User.pageNumber == 0
+          ? const Drawer(child: DrawerOptions())
+          : null,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(appBarTitles[globals.User.pageNumber]),
@@ -107,9 +116,16 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
       backgroundColor: homePageBackgroundColor,
       body: Center(child: _widgetOptions.elementAt(globals.User.pageNumber)),
       bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.grey[600],
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          // BottomNavigationBarItem(icon: Icon(Icons.shopping_cart),label: "Cart"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.apps),
+            label: "Categories",
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag_outlined), label: "Orders"),
           BottomNavigationBarItem(
@@ -118,12 +134,15 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
         currentIndex: globals.User.pageNumber,
         onTap: _onTapped,
         selectedItemColor: appBarColor,
+        backgroundColor: Colors.black26,
       ),
     );
   }
 }
 
 class DrawerOptions extends StatelessWidget {
+  const DrawerOptions({super.key});
+
   // // var currentUser;
   // Function onTapped;
 
@@ -133,7 +152,7 @@ class DrawerOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return globals.User.getCurrentUser()['user'] != null
         ? Container(
-            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 5),
             color: appBarColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
