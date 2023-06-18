@@ -11,15 +11,12 @@ import 'package:city_super_market/globals.dart' as globals;
 import 'dart:convert';
 import "arguments.dart";
 
-
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-
 
   // This widget is the root of your application.
   @override
@@ -34,28 +31,25 @@ class MyApp extends StatelessWidget {
         //     "/": (context) => MyStatefullWidget(),
         //     "/productDetails": (context) => ProductDetailsPage()
         // },
-        onGenerateRoute: (settings){
-          if(settings.name == "/")
-          {
-            return MaterialPageRoute(builder: (context){
-              return MyStatefullWidget();
+        onGenerateRoute: (settings) {
+          if (settings.name == "/") {
+            return MaterialPageRoute(builder: (context) {
+              return const MyStatefullWidget();
             });
-          }
-          else if(settings.name == "/productDetails")
-          {
+          } else if (settings.name == "/productDetails") {
             final args = settings.arguments as ProductDetailsArguments;
-            return MaterialPageRoute(builder: (context){
+            return MaterialPageRoute(builder: (context) {
               return ProductDetailsPage(
-                  productId:args.productId,
-                  image:args.image,
-                  brand:args.brand,
-                  actualPrice:args.actualPrice,
-                  mrp:args.mrp,
-                  discount:args.mrp,
-                  description:args.description
-              );
+                  productId: args.productId,
+                  image: args.image,
+                  brand: args.brand,
+                  actualPrice: args.actualPrice,
+                  mrp: args.mrp,
+                  discount: args.mrp,
+                  description: args.description);
             });
           }
+          return null;
         },
       ),
     );
@@ -63,6 +57,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyStatefullWidget extends StatefulWidget {
+  const MyStatefullWidget({super.key});
 
   // var currentUser = null;
 
@@ -75,64 +70,50 @@ class MyStatefullWidget extends StatefulWidget {
 class _MyStatefullWidgetState extends State<MyStatefullWidget> {
   // int _selectedIndex = 0;
 
-  List<Widget> _widgetOptions = [
-    HomePage(),
+  final List<Widget> _widgetOptions = [
+    const HomePage(),
     CartPage(),
-    AccountPage()
+    const AccountPage()
   ];
 
-  List<String> appBarTitles = [
-    "City Super Market",
-    "My Cart",
-    "My Account"
-  ];
+  List<String> appBarTitles = ["City Super Market", "My Cart", "My Account"];
 
-  void _onTapped(index)
-  {
-    if(index <= 2)
-    {
+  void _onTapped(index) {
+    if (index <= 2) {
       setState(() {
         // _selectedIndex = index;
         globals.User.setPageNumber(index);
       });
-    }
-    else if(index == 3)
-    {
-      Navigator.push(context,MaterialPageRoute(builder: (context) => OrdersPage()));
-    }
-    else if(index == 4)
-    {
+    } else if (index == 3) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const OrdersPage()));
+    } else if (index == 4) {
       setState(() {
-        globals.User.setCurrerntUser(
-            {
-              "user":null
-            });
+        globals.User.setCurrerntUser({"user": null});
       });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: globals.User.pageNumber == 0?Drawer(
-          child:DrawerOptions()
-      ):null,
-      resizeToAvoidBottomInset : false,
+      drawer:
+          globals.User.pageNumber == 0 ? Drawer(child: DrawerOptions()) : null,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(appBarTitles[globals.User.pageNumber]),
         backgroundColor: appBarColor,
       ),
       backgroundColor: homePageBackgroundColor,
-      body: Center(
-          child:_widgetOptions.elementAt(globals.User.pageNumber)
-      ),
+      body: Center(child: _widgetOptions.elementAt(globals.User.pageNumber)),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           // BottomNavigationBarItem(icon: Icon(Icons.shopping_cart),label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined),label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle),label: "Account"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_outlined), label: "Orders"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: "Account"),
         ],
         currentIndex: globals.User.pageNumber,
         onTap: _onTapped,
@@ -146,149 +127,156 @@ class DrawerOptions extends StatelessWidget {
   // // var currentUser;
   // Function onTapped;
 
-
-
   // DrawerOptions({required this.currentUser,required this.onTapped});
 
   @override
   Widget build(BuildContext context) {
-    return globals.User.getCurrentUser()['user']!=null?Container(
-      padding: EdgeInsets.symmetric(vertical: 50,horizontal: 5),
-      color: appBarColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(globals.User.getCurrentUser()['user']['name'],style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18
-              ),),
-              SizedBox(height: 10,),
-              Text(globals.User.getCurrentUser()['user']['emailId'],style: TextStyle(
-                  color: Colors.white38,
-                  fontSize: 15
-              ),)
-
-            ],
-          ),
-          Divider(
-            color: homePageBackgroundColor,
-          ),
-          SizedBox(height: 10,),
-          DrawerOptionIcon(icon: Icons.account_circle, option: "My Account"),
-          SizedBox(height: 5,),
-          DrawerOptionIcon(icon: Icons.shopping_cart, option: "My Cart"),
-          SizedBox(height: 5,),
-          DrawerOptionIcon(icon: Icons.shopping_bag_outlined, option: "My Orders"),
-          SizedBox(height: 5,),
-          DrawerOptionIcon(icon: Icons.logout, option: "Log out"),
-
-
-        ],
-      ),
-    ):Container(
-      padding: EdgeInsets.symmetric(vertical: 50,horizontal: 5),
-      color: appBarColor,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
+    return globals.User.getCurrentUser()['user'] != null
+        ? Container(
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 5),
+            color: appBarColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextButton(onPressed: () async {
-                  await Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
-                  Navigator.pop(context);
-                },
-                  child:Text("Login",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18
-                  ),),),
-                SizedBox(height: 10,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      globals.User.getCurrentUser()['user']['name'],
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      globals.User.getCurrentUser()['user']['emailId'],
+                      style:
+                          const TextStyle(color: Colors.white38, fontSize: 15),
+                    )
+                  ],
+                ),
+                Divider(
+                  color: homePageBackgroundColor,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const DrawerOptionIcon(
+                    icon: Icons.account_circle, option: "My Account"),
+                const SizedBox(
+                  height: 5,
+                ),
+                const DrawerOptionIcon(
+                    icon: Icons.shopping_cart, option: "My Cart"),
+                const SizedBox(
+                  height: 5,
+                ),
+                const DrawerOptionIcon(
+                    icon: Icons.shopping_bag_outlined, option: "My Orders"),
+                const SizedBox(
+                  height: 5,
+                ),
+                const DrawerOptionIcon(icon: Icons.logout, option: "Log out"),
               ],
             ),
-            Divider(
-              color: homePageBackgroundColor,
-            ),
-          ]),
-    );
+          )
+        : Container(
+            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 5),
+            color: appBarColor,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+              Divider(
+                color: homePageBackgroundColor,
+              ),
+            ]),
+          );
   }
 }
 
 class DrawerOptionIcon extends StatelessWidget {
+  final IconData icon;
+  final String option;
 
-  IconData icon;
-  String option;
-
-  DrawerOptionIcon({required this.icon,required this.option});
+  const DrawerOptionIcon({super.key, required this.icon, required this.option});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        if(option=="My Cart")
-        {
+        if (option == "My Cart") {
           globals.User.setPageNumber(1);
-          await Navigator.push(context,MaterialPageRoute(builder: (context) => MyStatefullWidget()));
+          await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MyStatefullWidget()));
           Navigator.pop(context);
-        }
-        else if (option == "My Account")
-        {
+        } else if (option == "My Account") {
           globals.User.setPageNumber(2);
-          await Navigator.push(context,MaterialPageRoute(builder: (context) => MyStatefullWidget()));
+          await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MyStatefullWidget()));
           Navigator.pop(context);
           // Navigator.pop(context);
-        }
-        else if(option == "My Orders")
-        {
-          await Navigator.push(context,MaterialPageRoute(builder: (context)=> OrdersPage()));
+        } else if (option == "My Orders") {
+          await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const OrdersPage()));
           Navigator.pop(context);
-        }
-        else if(option == "Log out")
-        {
-          globals.User.setCurrerntUser({
-            "user":null
-          });
+        } else if (option == "Log out") {
+          globals.User.setCurrerntUser({"user": null});
           Navigator.pop(context);
         }
       },
       child: Row(
         children: [
-          Icon(icon,size: 21,color: Colors.white70,),
-          SizedBox(width: 10,),
-          Text(option,style: TextStyle(
-              color: Colors.white70,
-              fontSize: 17,
-              fontWeight: FontWeight.w500
-          ),)
+          Icon(
+            icon,
+            size: 21,
+            color: Colors.white70,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            option,
+            style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 17,
+                fontWeight: FontWeight.w500),
+          )
         ],
       ),
     );
   }
 }
 
+class User extends ChangeNotifier {
+  var currentUser = jsonEncode(<String, dynamic>{"_id": null});
 
-class User extends ChangeNotifier
-{
-  var currentUser = jsonEncode(<String,dynamic>{
-    "_id":null
-  });
-
-  void setCurrerntUser(Map<String,dynamic> user)
-  {
+  void setCurrerntUser(Map<String, dynamic> user) {
     // var decodedUser = jsonDecode(user);
-    currentUser = jsonEncode(<String,dynamic>{
-      ...user
-    });
+    currentUser = jsonEncode(<String, dynamic>{...user});
 
     print("global value set");
     print(currentUser);
     notifyListeners();
   }
 
-  Map<String,dynamic> getCurrentUser()
-  {
+  Map<String, dynamic> getCurrentUser() {
     return jsonDecode(currentUser);
   }
-
 }
