@@ -46,15 +46,27 @@ class CategoryCard extends StatelessWidget {
           child: Column(
             children: [
               Flexible(
-                  child: Image(
-                      alignment: Alignment.center,
-                      fit: BoxFit.cover,
-                      image: NetworkImage(categoryData[categoryImage]))),
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Image(
+                              alignment: Alignment.center,
+                              fit: BoxFit.cover,
+                              image: NetworkImage(categoryData[categoryImage])),
+                        ),
+                      ),
+                    ],
+                  )),
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                 child: Text(
                   categoryData[categoryName],
                   style: categoryTitleStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               )
             ],
