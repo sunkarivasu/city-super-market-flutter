@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:city_super_market/constants/mock_data.dart';
 import 'package:city_super_market/widgets/categories/categories_grid_view.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import '../constants.dart';
 
 class ProductCategories extends StatefulWidget {
   const ProductCategories({super.key});
@@ -10,14 +15,19 @@ class ProductCategories extends StatefulWidget {
 }
 
 class _ProductCategoriesState extends State<ProductCategories> {
-  List<Map<String, dynamic>> allCategories = [];
+  List<dynamic> allCategories = [];
 
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      allCategories = mockCategories;
+    get(Uri.https(authority, "categories"))
+        .then((res)
+    {
+      var response = jsonDecode(res.body);
+      print(response);
+      setState((){
+        allCategories = response;
+      });
     });
   }
 

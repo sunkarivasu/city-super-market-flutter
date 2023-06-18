@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CategoriesGrid extends StatefulWidget {
   const CategoriesGrid({super.key, required this.categories});
 
-  final List<Map<String, dynamic>> categories;
+  final List<dynamic> categories;
 
   @override
   State<CategoriesGrid> createState() => _CategoriesGridState();
@@ -26,7 +26,7 @@ class _CategoriesGridState extends State<CategoriesGrid> {
 class CategoryCard extends StatelessWidget {
   const CategoryCard({super.key, required this.categoryData});
 
-  final Map<String, dynamic> categoryData;
+  final dynamic categoryData;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,6 @@ class CategoryCard extends StatelessWidget {
           child: Column(
             children: [
               Flexible(
-                  fit: FlexFit.tight,
                   child: Row(
                     children: [
                       Expanded(
@@ -54,7 +53,6 @@ class CategoryCard extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                           child: Image(
                               alignment: Alignment.center,
-                              fit: BoxFit.cover,
                               image: NetworkImage(categoryData[categoryImage])),
                         ),
                       ),
