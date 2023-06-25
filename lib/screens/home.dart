@@ -283,7 +283,7 @@ class CategoryItemsList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: categoryProducts.length,
         itemBuilder: (BuildContext context, int index){
-            // return ProductIconWidget(id:categoryProducts[index]['_id'],image: categoryProducts[index]['image'], name: categoryProducts[index]['name'], actualPrice: (categoryProducts[index]['variants'][0]['price']*(100-categoryProducts[index]['variants'][0]['discount'])/100),discount: categoryProducts[index]['variants'][0]['discount'], mrp: categoryProducts[index]['variants'][0]['price'], description: categoryProducts[index]['description']);
+            // hardcoded few fields for now need to be changed once the api end point is fixed.
             return ProductIconWidget(
                 id:categoryProducts[index]['_id'],
                 image: categoryProducts[index]['image'],
