@@ -74,14 +74,14 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
   final List<Widget> _widgetOptions = [
     const HomePage(),
     const ProductCategories(),
-    CartPage(),
+    const OrdersPage(),
     const AccountPage()
   ];
 
   List<String> appBarTitles = [
     "City Super Market",
     "Categories",
-    "My Cart",
+    "My Orders",
     "My Account"
   ];
 
@@ -116,6 +116,7 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
       backgroundColor: homePageBackgroundColor,
       body: Center(child: _widgetOptions.elementAt(globals.User.pageNumber)),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         unselectedItemColor: Colors.grey[600],
         items: const [
           BottomNavigationBarItem(
@@ -134,7 +135,6 @@ class _MyStatefullWidgetState extends State<MyStatefullWidget> {
         currentIndex: globals.User.pageNumber,
         onTap: _onTapped,
         selectedItemColor: appBarColor,
-        backgroundColor: Colors.black26,
       ),
     );
   }
