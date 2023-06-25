@@ -28,7 +28,11 @@ const kDescriptionTextStyle = TextStyle(
   color: Colors.black54,
 );
 
-const authority = "city-super-market.up.railway.app";
+// for production
+// const baseUrl = "https://city-super-market.up.railway.app";
+
+// for development
+const baseUrl = "http://10.0.2.2:9000/api";
 
 var kIconBrandNameTextStyle = const TextStyle(
   color: Colors.black87,

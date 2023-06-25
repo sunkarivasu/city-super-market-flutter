@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                   onPressed: (){
                     if (_loginFormKey.currentState!.validate()) {
-                      post(Uri.https(authority, 'users/login'),headers: <String, String>{
+                      post(Uri.parse(baseUrl + '/users/login'),headers: <String, String>{
                         'Content-Type': 'application/json; charset=UTF-8',
                       },body: jsonEncode(<String,String>{
                         ...loginDetails
@@ -231,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
                     print(jsonEncode(<String,String>{
                       ...registrationDetails
                     }));
-                    post(Uri.http(authority,'users/add',),headers: <String, String>{
+                    post(Uri.parse(baseUrl + '/users/add',),headers: <String, String>{
                       'Content-Type': 'application/json; charset=UTF-8',
                     },body: jsonEncode(<String,String>{
                       ...registrationDetails

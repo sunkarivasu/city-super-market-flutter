@@ -1,4 +1,4 @@
-import 'package:city_super_market/constants/category_tab.dart';
+import 'package:city_super_market/staticData/category_tab.dart';
 import 'package:city_super_market/screens/categoryProducts.dart';
 import 'package:flutter/material.dart';
 

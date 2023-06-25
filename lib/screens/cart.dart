@@ -33,8 +33,7 @@ class _CartPageState extends State<CartPage> {
   void fetchCartItems() {
     if (globals.User.getCurrentUser()['user'] != null) {
       //fetching cartItems
-      get(Uri.https(authority,
-              "users/cartItems/${globals.User.getCurrentUser()['user']['_id']}"))
+      get(Uri.parse(baseUrl + "/users/cartItems/${globals.User.getCurrentUser()['user']['_id']}"))
           .then((res) {
         print(res.body);
         setState(() {
@@ -124,9 +123,9 @@ class _CartPageState extends State<CartPage> {
                                                                 cartItems[index]
                                                                     ['_id'];
                                                             post(
-                                                                Uri.https(
-                                                                    authority,
-                                                                    "users/increaseQuantity"),
+                                                                Uri.parse(
+                                                                    baseUrl +
+                                                                    "/users/increaseQuantity"),
                                                                 headers: <
                                                                     String,
                                                                     String>{
@@ -226,9 +225,9 @@ class _CartPageState extends State<CartPage> {
                                                                 cartItems[index]
                                                                     ['_id'];
                                                             post(
-                                                                Uri.https(
-                                                                    authority,
-                                                                    "users/decreaseQuantity"),
+                                                                Uri.parse(
+                                                                    baseUrl +
+                                                                    "/users/decreaseQuantity"),
                                                                 headers: <
                                                                     String,
                                                                     String>{
@@ -340,8 +339,8 @@ class _CartPageState extends State<CartPage> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
-                                                  post(Uri.https(authority,
-                                                          "users/removeFromCart/${globals.User.getCurrentUser()['user']['_id']}/${cartItems[index]['_id']}"))
+                                                  post(Uri.parse(baseUrl +
+                                                          "/users/removeFromCart/${globals.User.getCurrentUser()['user']['_id']}/${cartItems[index]['_id']}"))
                                                       .then((res) {
                                                     print(res.body);
                                                     fetchCartItems();

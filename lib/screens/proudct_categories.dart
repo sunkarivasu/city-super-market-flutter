@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:city_super_market/constants/mock_data.dart';
+import 'package:city_super_market/constants.dart';
 import 'package:city_super_market/widgets/categories/categories_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-import '../constants.dart';
 
 class ProductCategories extends StatefulWidget {
   const ProductCategories({super.key});
@@ -20,13 +18,13 @@ class _ProductCategoriesState extends State<ProductCategories> {
   @override
   void initState() {
     super.initState();
-    get(Uri.https(authority, "categories"))
-        .then((res)
-    {
+
+    // fetching all categories
+    get(Uri.parse(baseUrl + "/categories"))
+    .then((res) {
       var response = jsonDecode(res.body);
-      print(response);
-      setState((){
-        allCategories = response;
+      setState(() {
+        allCategories = response['data'];
       });
     });
   }
