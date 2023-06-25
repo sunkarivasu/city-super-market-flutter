@@ -20,7 +20,7 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    get(Uri.https(authority, "orders/getOrdersByUserId/${globals.User.getCurrentUser()['user']['_id']}"))
+    get(Uri.parse(baseUrl + "orders/getOrdersByUserId/${globals.User.getCurrentUser()['user']['_id']}"))
     .then((res){
       print(res.body);
       var decodedResponse = jsonDecode(res.body);

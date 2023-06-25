@@ -79,8 +79,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void checkAlreadyInCartOrNot() {
-    get(Uri.https(authority,
-            'users/inCartOrNot/${currentUser['_id']}/${widget.productId}'))
+    get(Uri.parse(baseUrl+ '/users/inCartOrNot/${currentUser['_id']}/${widget.productId}'))
         .then((res) {
       // print('response');
       print(res.body);
@@ -180,8 +179,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                             MyStatefullWidget()));
                               }
                             : () {
-                                post(Uri.https(authority,
-                                        "users/addToCart/${globals.User.getCurrentUser()['user']['_id']}/${widget.productId}"))
+                                post(Uri.parse(baseUrl +
+                                        "/users/addToCart/${globals.User.getCurrentUser()['user']['_id']}/${widget.productId}"))
                                     .then((res) {
                                   print(res.body);
                                   setState(() {

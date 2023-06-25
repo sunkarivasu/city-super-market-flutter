@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'package:city_super_market/constants.dart';
+import 'package:city_super_market/staticData/category_tab.dart';
 import 'package:city_super_market/screens/categoryProducts.dart';
-import 'package:city_super_market/screens/productDetails.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:city_super_market/main.dart';
 import 'package:http/http.dart';
-import 'package:provider/provider.dart';
-import 'package:city_super_market/globals.dart' as globals;
 import 'package:city_super_market/arguments.dart';
 
 
@@ -34,11 +31,12 @@ class _HomePageState extends State<HomePage> {
 
   void appendAllComponents()
   {
-    for(List categoryTopItem in categoryTopItems)
+    for(var categoryTopItem in categoryTopItems)
       {
         print("categoryTopitem");
-        print(categoryTopItem[0]['category']);
-        scrollableComponents.add(CategoryProductsWidgets(categoryData: categoryTopItem));
+        print(categoryTopItem['category']);
+        print(categoryTopItem['products']);
+        scrollableComponents.add(CategoryProductsWidgets(categoryName:categoryTopItem['category'],categoryProducts: categoryTopItem['products']));
       }
     // scrollableComponents.add(Footer());
   }
@@ -50,25 +48,29 @@ class _HomePageState extends State<HomePage> {
 
     // print(Provider.of<User>(context).currentUser);
 
-    // print(globals.User.getCurrentUser()['user']['_id']);
-    //fetching categories
-    get(Uri.https(authority, "categories"))
-    .then((res)
+    //fetching all categories
+    get(Uri.parse(baseUrl + "/categories"))
+        .then((res)
     {
       var response = jsonDecode(res.body);
+      print("response:");
+      print(response);
+      print(response["data"]);
       setState((){
-        categories = response;
+        categories = response['data'];
       });
     });
 
-    //fetching top 6 products from all categories
-    get(Uri.https(authority, "products/noOfProducts/6"))
+    //fetching top 10 products from all categories
+    get(Uri.parse(baseUrl + "/products/topProductsByCategory/10"))
     .then((res) {
-      print(res.body);
+      var response =  jsonDecode(res.body);
+      print("category top items");
+      print(response['data']);
       setState((){
-        categoryTopItems = jsonDecode(res.body);
+        categoryTopItems = response['data'];
       });
-      // print(categoryTopItems);
+      print(categoryTopItems);
       appendAllComponents();
     });
 
@@ -268,9 +270,10 @@ class CategoryIcon extends StatelessWidget {
 }
 
 class CategoryItemsList extends StatelessWidget {
-  List categoryData;
+  List categoryProducts;
 
-  CategoryItemsList({required this.categoryData});
+
+  CategoryItemsList({required this.categoryProducts});
 
   @override
   Widget build(BuildContext context) {
@@ -278,9 +281,18 @@ class CategoryItemsList extends StatelessWidget {
       height: 225,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: categoryData.length,
+        itemCount: categoryProducts.length,
         itemBuilder: (BuildContext context, int index){
-            return ProductIconWidget(id:categoryData[index]['_id'],image: categoryData[index]['image'], name: categoryData[index]['brand'], actualPrice: (categoryData[index]['price']*(100-categoryData[index]['discount'])/100),discount: categoryData[index]['discount'], mrp: categoryData[index]['price'], description: categoryData[index]['description']);
+            // return ProductIconWidget(id:categoryProducts[index]['_id'],image: categoryProducts[index]['image'], name: categoryProducts[index]['name'], actualPrice: (categoryProducts[index]['variants'][0]['price']*(100-categoryProducts[index]['variants'][0]['discount'])/100),discount: categoryProducts[index]['variants'][0]['discount'], mrp: categoryProducts[index]['variants'][0]['price'], description: categoryProducts[index]['description']);
+            return ProductIconWidget(
+                id:categoryProducts[index]['_id'],
+                image: categoryProducts[index]['image'],
+                name: categoryProducts[index]['name'],
+                actualPrice: (categoryProducts[index]['variants'][0]['price']*(100-20)/100),
+                discount: 20,
+                mrp: categoryProducts[index]['variants'][0]['price'],
+                description: 'description hard coded for now.');
+
         },
       ),
     );
@@ -289,8 +301,9 @@ class CategoryItemsList extends StatelessWidget {
 
 class CategoryProductsWidgets extends StatelessWidget {
 
-  List categoryData;
-  CategoryProductsWidgets({required this.categoryData});
+  List categoryProducts;
+  String categoryName;
+  CategoryProductsWidgets({required this.categoryProducts, required this.categoryName});
 
 
 
@@ -316,14 +329,14 @@ class CategoryProductsWidgets extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(categoryData[0]['category'],style:
+                Text(categoryName,style:
                 TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                   color: Colors.black
                 )),
                 TextButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryProductsPage(categoryName: categoryData[0]['category'],)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryProductsPage(categoryName: categoryName)));
                   // print("navigating");
                 }, child: Text("VIEW ALL"),
                 style: TextButton.styleFrom(
@@ -338,7 +351,7 @@ class CategoryProductsWidgets extends StatelessWidget {
           child: Container(
             color: Color(0xffeeeeee),
           ),),
-          CategoryItemsList(categoryData:categoryData),
+          CategoryItemsList(categoryProducts:categoryProducts),
         ],
       ),
     );

@@ -1,11 +1,11 @@
-import 'package:city_super_market/constants/category_tab.dart';
+import 'package:city_super_market/staticData/category_tab.dart';
 import 'package:city_super_market/screens/categoryProducts.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesGrid extends StatefulWidget {
   const CategoriesGrid({super.key, required this.categories});
 
-  final List<Map<String, dynamic>> categories;
+  final List<dynamic> categories;
 
   @override
   State<CategoriesGrid> createState() => _CategoriesGridState();

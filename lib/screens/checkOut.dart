@@ -63,7 +63,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
   void placeOrderForAllProducts() async {
     int successCount = 0;
     for (Map<String, dynamic> product in widget.products) {
-      await post(Uri.https(authority, "orders/add"),
+      await post(Uri.parse(baseUrl + "/orders/add"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
