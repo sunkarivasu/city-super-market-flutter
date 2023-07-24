@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const String categoryName = 'categoryName';
 const String categoryImage = 'categoryImage';
+const String categoryId = '_id';
 
 const String title = 'Categories';
 
