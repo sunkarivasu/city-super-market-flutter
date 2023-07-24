@@ -44,9 +44,8 @@ class MyApp extends StatelessWidget {
                   productId: args.productId,
                   image: args.image,
                   brand: args.brand,
-                  actualPrice: args.actualPrice,
-                  mrp: args.mrp,
-                  discount: args.mrp,
+                  variants: args.variants,
+                  quantityType: args.quantityType,
                   description: args.description);
             });
           }

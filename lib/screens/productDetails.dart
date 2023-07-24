@@ -15,18 +15,16 @@ class ProductDetailsPage extends StatefulWidget {
   String productId;
   String image;
   String brand;
-  double actualPrice;
-  int mrp;
-  int discount;
+  List variants;
+  String quantityType;
   String description;
 
   ProductDetailsPage(
       {required this.productId,
       required this.image,
       required this.brand,
-      required this.actualPrice,
-      required this.mrp,
-      required this.discount,
+      required this.variants,
+        required this.quantityType,
       required this.description});
 
   @override
@@ -36,9 +34,7 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   bool alreadyInCart = false;
   var currentUser = globals.User.getCurrentUser()['user'];
-  var selectedQuantityIndex = 0;
-  List<Map<String,String>> quantities = [{"quantity":"100 ML","price":'10'}, {"quantity":"500 ML",'price':'50'},{"quantity":"1 L","price":'100'}, {"quantity":"1.5 L",'price':'150'}];
-
+  var selectedVariantIndex = 0;
 
   @override
   void initState() {
@@ -55,20 +51,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   List<Widget> getQuantityList() {
     List<Widget> quantityButtons = [];
 
-    for (var i = 0; i < quantities.length; i++) {
+    for (var i = 0; i < widget.variants.length; i++) {
       var quantityButton = Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: TextButton(
             onPressed: () => {
-              setState(()=>{
-                selectedQuantityIndex = i
-              }),
-              setState(()=>{
-              widget.mrp = int.parse(quantities[i]['price']!)
-              })
-            },
-            child: Text(quantities[i]['quantity']!),
-            style: selectedQuantityIndex == i
+                  setState(() => {selectedVariantIndex = i}),
+                  // setState(()=>{
+                  // widget.mrp = int.parse(quantities[i]['price']!)
+                  // })
+                },
+            child: Text(widget.variants[i]['quantity'].toString() + widget.quantityType),
+            style: selectedVariantIndex == i
                 ? kQuantitySelectedButtonStyle
                 : kQuantityButtonStyle),
       );
@@ -79,7 +73,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void checkAlreadyInCartOrNot() {
-    get(Uri.parse(baseUrl+ '/users/inCartOrNot/${currentUser['_id']}/${widget.productId}'))
+    get(Uri.parse(baseUrl +
+            '/users/inCartOrNot/${currentUser['_id']}/${widget.productId}'))
         .then((res) {
       // print('response');
       print(res.body);
@@ -136,7 +131,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   children: [
                     Text(
                         // "₹ ${widget.actualPrice.toInt()}",
-                        "₹ ${widget.mrp}",
+                        "₹ ${widget.variants[selectedVariantIndex]['price']}",
                         style: kActualPriceTextStyle),
                     // Text("₹ ${args.actualPrice.toInt()}",style:kActualPriceTextStyle),
                     // SizedBox(width: 10,),
@@ -191,7 +186,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     style: TextButton.styleFrom(
                         // backgroundColor: Colors.orange,
                         foregroundColor: appBarColor,
-                        side:BorderSide(color:appBarColor),
+                        side: BorderSide(color: appBarColor),
                         primary: Colors.white,
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 15)),
@@ -208,9 +203,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             print([
                               {
                                 "_id": widget.productId,
-                                "discount":
-                                    widget.actualPrice / widget.mrp * 100,
-                                "price": widget.mrp,
+                                "discount": widget
+                                    .variants[selectedVariantIndex].discount,
+                                "price":
+                                    widget.variants[selectedVariantIndex].price,
                                 "orderQuantity": 1
                               }
                             ]);
@@ -221,10 +217,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         CheckOutPage(products: [
                                           {
                                             "_id": widget.productId,
-                                            "discount": widget.actualPrice /
-                                                widget.mrp *
-                                                100,
-                                            "price": widget.mrp,
+                                            "discount": widget
+                                                .variants[selectedVariantIndex]
+                                                .discount,
+                                            "price": widget
+                                                .variants[selectedVariantIndex]
+                                                .price,
                                             "orderQuantity": 1
                                           }
                                         ])));

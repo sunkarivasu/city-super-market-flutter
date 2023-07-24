@@ -29,10 +29,14 @@ const kDescriptionTextStyle = TextStyle(
 );
 
 // for production
-// const baseUrl = "https://city-super-market.up.railway.app";
+// const baseUrl = "https://csm-rajam.tech";
 
-// for development
-const baseUrl = "http://10.0.2.2:9000/api";
+// for development on emulator
+// const baseUrl = "http://10.0.2.2:9000/api";
+
+// for development on real device (both the devices should be on same network)
+const baseUrl = "http://192.168.167.77:9000/api";
+
 
 var kIconBrandNameTextStyle = const TextStyle(
   color: Colors.black87,
@@ -108,4 +112,17 @@ var kQuantitySelectedButtonStyle = TextButton.styleFrom(
   backgroundColor: appBarColor,
   foregroundColor: Colors.white,
   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+);
+
+// home screen
+var categoryNameStyle = TextStyle(
+fontWeight: FontWeight.w500,
+fontSize: 18,
+color: Colors.black
+);
+
+var viewAllButtonStyle = TextButton.styleFrom(
+    backgroundColor: Color(0xff172437),
+    primary: Colors.white,
+    padding: EdgeInsets.all(11)
 );

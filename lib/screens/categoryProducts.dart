@@ -9,9 +9,13 @@ import 'package:city_super_market/globals.dart' as globals;
 
 class CategoryProductsPage extends StatefulWidget {
 
+  bool isSpecialOffer;
   String categoryName;
+  String categoryId;
 
-  CategoryProductsPage({required this.categoryName});
+
+
+  CategoryProductsPage({this.isSpecialOffer=false,required this.categoryName, required this.categoryId});
 
 
   @override
@@ -24,26 +28,39 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    get(Uri.https(authority,"products/category/${widget.categoryName}"))
-        .then((res) {
-        print(res.body);
-        setState(() {
-          products = jsonDecode(res.body);
+    if(widget.isSpecialOffer)
+      {
+        get(Uri.parse(baseUrl + "/normalOffers/"))
+            .then((res) {
+              var response = jsonDecode(res.body);
+              print("special Offers");
+              print(response);
+              setState(() {
+                products = response['data'];
+              });
         });
-    });
+      }
+    else {
+      get(Uri.parse(baseUrl + "/products/category/${widget.categoryId}"))
+          .then((res) {
+        print(res.body);
+        var response = jsonDecode(res.body);
+        setState(() {
+          products = response['data'];
+        });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:Text(widget.categoryName),
+          title:Text(widget.isSpecialOffer?"Special Offers":widget.categoryName),
           backgroundColor: appBarColor,
         ),
         backgroundColor: Colors.white,
         body: Container(
-          // padding: EdgeInsets.all(10),
           child:GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 0,
@@ -58,7 +75,7 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                 ),
                 child:TextButton(
                   onPressed: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => ProductDetailsPage(productId:products[index]['_id'],image: products[index]['image'], brand: products[index]['brand'], actualPrice: (((100-products[index]['discount'])/100)*products[index]['price']), mrp: products[index]['price'], discount: products[index]['discount'], description: products[index]['description'])));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => ProductDetailsPage(productId:products[index]['_id'],image: products[index]['image'], brand: products[index]['brand'], variants:products[index]['variants'],quantityType: products[index]['quantityType'],description: products[index]['description'])));
                   },
                     style: TextButton.styleFrom(padding: EdgeInsets.all(0)),
                 child:Column(
@@ -74,7 +91,7 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                       Text(products[index]['brand'],
                         style: kIconBrandNameTextStyle,),
                       SizedBox(height: 5,),
-                      Text("₹ ${products[index]['price']}",style: kIconActualPriceTextStyle),
+                      Text("₹ ${products[index]['variants'][0]['price']}",style: kIconActualPriceTextStyle),
                       // Row(
                       //   children: [
                       //     Text("₹ ${(((100-products[index]['discount'])/100)*products[index]['price']).toInt()}",style: kIconActualPriceTextStyle,),
